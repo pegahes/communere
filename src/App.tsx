@@ -1,7 +1,5 @@
 import { Box,Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import TabPanel from "./TabPanel";
-import PreviewForms from "./PreviewForms";
 import CreateEditForms from "./CreateEditForms";
 
 function App() {

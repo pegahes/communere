@@ -1,23 +1,45 @@
 import { Box, Button, TextField } from "@mui/material";
-import { FormElement } from "./type";
+import { Form, FormElement } from "./type";
 import { ElementEditor } from "./ElementEditor";
+import { v4 as uuidv4 } from "uuid";
+import { useCallback } from "react";
 
-export default function EditForm({
-  editingForm,
-  saveForm,
-  setEditingForm,
-}: {
-  editingForm: any;
+interface EditFormProps {
+  editingForm: Form | null;
   saveForm: () => void;
-  setEditingForm: (form: any) => void;
-}) {
+  setEditingForm: (form: Form | null) => void;
+}
+
+export default function EditForm({ editingForm, saveForm, setEditingForm }: EditFormProps): JSX.Element {
+ 
+
+  const handleElementChange = useCallback(
+    (id: string, updatedElement: FormElement) => {
+      if (!editingForm) return;
+      const updatedElements = editingForm.elements.map((element) =>
+        element.id === id ? updatedElement : element
+      );
+      setEditingForm({ ...editingForm, elements: updatedElements });
+    },
+    [editingForm, setEditingForm]
+  );
+
+  const handleElementDelete = useCallback(
+    (id: string) => {
+      if (!editingForm) return;
+      const updatedElements = editingForm.elements.filter((element) => element.id !== id);
+      setEditingForm({ ...editingForm, elements: updatedElements });
+    },
+    [editingForm, setEditingForm]
+  );
+
   if (!editingForm || !editingForm.elements) {
     return <Box sx={{ p: 2 }}>Loading...</Box>;
   }
 
   const handleAddElement = () => {
     const newElement: FormElement = {
-      id: `e${editingForm.elements.length + 1}`,
+      id: uuidv4(),
       type: "text",
       label: "label",
       isRequired: false
@@ -28,13 +50,7 @@ export default function EditForm({
     });
   };
 
-  const handleElementChange = (id: string, updatedElement: FormElement) => {
-    const updatedElements = editingForm.elements.map((element: FormElement) =>
-      element.id === id ? updatedElement : element
-    );
-    setEditingForm({ ...editingForm, elements: updatedElements });
-  };
-
+ 
   return (
     <Box sx={{ p: 2 }}>
       <TextField
@@ -53,9 +69,8 @@ export default function EditForm({
         <ElementEditor
           key={element.id}
           element={element}
-          onChange={(id: string ,updatedElement: FormElement) =>
-            handleElementChange(id, updatedElement)
-          }
+          onDelete={handleElementDelete}
+          onChange={handleElementChange}
         />
       ))}
       <Button variant="contained" color="primary" onClick={() => saveForm()}>

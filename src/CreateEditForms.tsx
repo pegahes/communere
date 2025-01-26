@@ -1,13 +1,57 @@
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, IconButton, Stack } from "@mui/material";
 import EditForm from "./EditForm";
 import { useEditingForm } from "./useEditingForm";
+import { Delete } from "@mui/icons-material";
+import { Form } from "./type";
 
-export default function CreateEditForms() {
+interface FormListItemProps {
+  form: Form;
+  isSelected: boolean;
+  onSelect: () => void;
+  onDelete: (e: React.MouseEvent) => void;
+}
 
-  const { editingForm, saveForm, setEditingForm, forms , setSelectedFormId , selectedFormId} =
+function FormListItem({ form, isSelected, onSelect, onDelete }: FormListItemProps): JSX.Element {
+  return (
+  <Box
+    onClick={onSelect}
+    sx={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 1,
+      borderBottom: "1px solid #ccc",
+    }}
+  >
+    <Box
+      sx={{
+        paddingX: 6,
+        paddingY: 2,
+        backgroundColor: isSelected ? "lightblue" : "white",
+        cursor: "pointer",
+      }}
+    >
+      {form.name}
+    </Box>
+    <IconButton onClick={onDelete} sx={{ marginLeft: "auto" }}>
+      <Delete />
+    </IconButton>
+  </Box>
+
+);
+}
+
+export default function CreateEditForms(): JSX.Element {
+
+  const { editingForm, saveForm, setEditingForm, forms , setSelectedFormId , selectedFormId, addNewForm, deleteFromForms} =
     useEditingForm();
 
-  const handleAddForm = () => {};
+    const handleFormClick = (id: string) => () => setSelectedFormId(id);
+
+    const handleDeleteClick = (id: string) => (e: React.MouseEvent) => {
+      e.stopPropagation();
+      deleteFromForms(id);
+    };
 
   return (
     <Stack
@@ -33,7 +77,7 @@ export default function CreateEditForms() {
             justifyContent: "center",
           }}
         >
-          <Button variant="contained" onClick={handleAddForm}>
+          <Button variant="contained" onClick={addNewForm}>
             ADD A FORM
           </Button>
         </Box>
@@ -44,19 +88,13 @@ export default function CreateEditForms() {
           }}
         >
           {forms.map((form) => (
-            <Box
+              <FormListItem
               key={form.id}
-              sx={{
-                padding: 1,
-                borderBottom: "1px solid #ccc",
-                backgroundColor:
-                  form.id === selectedFormId ? "lightblue" : "white",
-                cursor: "pointer",
-              }}
-              onClick={() => setSelectedFormId(form.id)}
-            >
-              {form.name}
-            </Box>
+              form={form}
+              isSelected={form.id === selectedFormId}
+              onSelect={handleFormClick(form.id)}
+              onDelete={handleDeleteClick(form.id)}
+            />
           ))}
         </Box>
       </Stack>

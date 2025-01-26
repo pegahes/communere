@@ -1,66 +1,67 @@
 import { useEffect, useState } from "react";
 import { Form } from "./type";
+import { useFormsStore } from "./useFormStore";
+import { v4 as uuidv4 } from 'uuid';
 
 export const useEditingForm = () => {
   const [editingForm, setEditingForm] = useState<any | null>(null);
   const [selectedFormId, setSelectedFormId] = useState<any | null>(null);
 
-  const [forms, setForms] = useState<Form[]>([
-    {
-      id: "f1",
-      name: "Form One",
-      elements: [
-        {
-          id: "e1",
-          type: "text",
-          label: "First Name",
-          isRequired: true,
-        },
-        {
-          id: "e2",
-          type: "checkbox",
-          label: "Hobbies",
-          isRequired: false,
-          choices: [
-            { id: "c1", name: "Reading" },
-            { id: "c2", name: "Traveling" },
-            { id: "c3", name: "Sports" },
-          ],
-        },
-      ],
-    },
-    {
-      id: "f2",
-      name: "Form Two",
-      elements: [
-        {
-          id: "e3",
-          type: "text",
-          label: "Email",
-          isRequired: true,
-        },
-      ],
-    },
-  ]);
+  const forms = useFormsStore((state) => state.forms);
+  const addForm = useFormsStore((state) => state.addForm);
+  const updateForm = useFormsStore((state) => state.updateForm);
+  const deleteForm = useFormsStore((state) => state.deleteForm);
 
   useEffect(() => {
-    if (forms.length > 0 && selectedFormId) {
+    if (forms.length > 0) {
       const selectedForm = forms.find((form) => form.id === selectedFormId);
-      setEditingForm(selectedForm ? { ...selectedForm } : null);
-    } else if (forms.length > 0 && !selectedFormId) {
-      setEditingForm(forms[0]);
+      if (selectedForm) {
+        setEditingForm({ ...selectedForm });
+      } else if (selectedFormId === null) {
+        setSelectedFormId(forms[0].id);
+        setEditingForm(forms[0]);
+      }
+    } else {
+      setSelectedFormId(null);
+      setEditingForm(null);
     }
   }, [selectedFormId, forms]);
 
   const saveForm = () => {
     if (editingForm) {
-      setForms((prevForms) =>
-        prevForms.map((form) =>
-          form.id === editingForm.id ? { ...editingForm } : form
-        )
-      );
+      updateForm(editingForm);
     }
   };
+
+  const addNewForm = () => {
+
+    const newFormId = uuidv4(); 
+    const newForm: Form = {
+      id: newFormId,
+      name: `Form ${forms.length + 1}`,
+      elements: [
+        {
+          id: 'e1', 
+          type: "text",
+          label: "New Label",
+          isRequired: false,
+        },
+      ],
+    };
+   
+    addForm(newForm);
+    setSelectedFormId(newFormId)
+  }
+
+  const deleteFromForms = (id: string) => {
+    if (id == selectedFormId) {
+   
+        setSelectedFormId(null); 
+      
+    }
+    deleteForm(id);
+   
+  }
 
   return {
     editingForm,
@@ -69,5 +70,7 @@ export const useEditingForm = () => {
     forms,
     setSelectedFormId,
     selectedFormId,
+    addNewForm,
+    deleteFromForms
   };
 };
