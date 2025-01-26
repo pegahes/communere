@@ -1,45 +1,7 @@
-import { Box, Button, IconButton, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import EditForm from "./EditForm";
-import { useEditingForm } from "./useEditingForm";
-import { Delete } from "@mui/icons-material";
-import { Form } from "./type";
-
-interface FormListItemProps {
-  form: Form;
-  isSelected: boolean;
-  onSelect: () => void;
-  onDelete: (e: React.MouseEvent) => void;
-}
-
-function FormListItem({ form, isSelected, onSelect, onDelete }: FormListItemProps): JSX.Element {
-  return (
-  <Box
-    onClick={onSelect}
-    sx={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: 1,
-      borderBottom: "1px solid #ccc",
-    }}
-  >
-    <Box
-      sx={{
-        paddingX: 6,
-        paddingY: 2,
-        backgroundColor: isSelected ? "lightblue" : "white",
-        cursor: "pointer",
-      }}
-    >
-      {form.name}
-    </Box>
-    <IconButton onClick={onDelete} sx={{ marginLeft: "auto" }}>
-      <Delete />
-    </IconButton>
-  </Box>
-
-);
-}
+import { useEditingForm } from "../hooks/useEditingForm";
+import { FormListItem } from "./FormItem";
 
 export default function CreateEditForms(): JSX.Element {
 
@@ -57,27 +19,27 @@ export default function CreateEditForms(): JSX.Element {
     <Stack
       direction="row"
       sx={{
+        backgroundColor: '#eff2f1',
         width: "100%",
         height: "100%",
+        borderRadius: 8
       }}
     >
       <Stack
         direction="column"
         sx={{
           width: 300,
-          border: "1px solid #000",
         }}
       >
         <Box
           sx={{
             height: 60,
-            borderBottom: "1px solid #000",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          <Button variant="contained" onClick={addNewForm}>
+          <Button sx={{backgroundColor: '#03045e'}} variant="contained" onClick={addNewForm}>
             ADD A FORM
           </Button>
         </Box>
@@ -102,7 +64,7 @@ export default function CreateEditForms(): JSX.Element {
       <Box
         sx={{
           flex: 1,
-          border: "1px solid #000",
+          borderLeft: "1px solid #30638e",
         }}
       >
         {selectedFormId ? (

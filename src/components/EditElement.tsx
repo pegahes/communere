@@ -7,9 +7,9 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { FormElement } from "./type";
 import { Delete } from "@mui/icons-material";
 import { useCallback } from "react";
+import { FormElement } from "../type";
 
 interface ElementEditorProps {
   element: FormElement;
@@ -49,11 +49,12 @@ export function ElementEditor({ element, onChange, onDelete }: ElementEditorProp
   return (
     <Box
       sx={{
-        border: "1px solid #ccc",
+        border: "1px solid #c9cad9",
         borderRadius: 4,
         padding: 2,
         display: "flex",
         flexDirection: "column",
+        backgroundColor: '#F7F9F8',
         gap: 1,
         marginY: 2,
       }}
@@ -62,7 +63,9 @@ export function ElementEditor({ element, onChange, onDelete }: ElementEditorProp
         onClick={() => onDelete(element.id)}
         sx={{
          width: 10,
-         height: 10
+         height: 10,
+         margin: 2,
+         color: '#BFC0CD'
         }}
       >
         <Delete />

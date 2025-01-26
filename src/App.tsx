@@ -1,13 +1,7 @@
-import { Box,Tab, Tabs } from "@mui/material";
-import { useState } from "react";
-import CreateEditForms from "./CreateEditForms";
+import { Box} from "@mui/material";
+import CreateEditForms from "./components/container";
 
 function App() {
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
 
   return (
     <Box
@@ -15,34 +9,11 @@ function App() {
         width: "100%",
         minHeight: "100vh",
         display: "flex",
-        flexDirection: 'column',
-        justifyContent: "center", 
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        centered
-        aria-label="Main Tabs"
-        sx={{
-          "& .Mui-focusVisible": {
-            outline: "none",
-          },
-        }}
-      >
-        <Tab
-          label="Create & Edit Forms"
-          sx={{
-            ":focus": { outline: "none" },
-          }}
-        />
-        <Tab
-          label="Preview Forms"
-          sx={{
-            ":focus": { outline: "none" },
-          }}
-        />
-      </Tabs>
+      
 
       <Box
         sx={{
@@ -50,10 +21,11 @@ function App() {
           overflowY: "auto",
           display: "flex",
           alignItems: "flex-start",
-           p: 4,
+          p: 4,
         }}
       >
-          <CreateEditForms />
+     <CreateEditForms />
+    
       </Box>
     </Box>
   );

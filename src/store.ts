@@ -13,7 +13,7 @@ export interface FormsState {
     deleteElementFromForm: (formId: string, elementId: string) => void;
   }
 
-  export const useFormsStore = create<FormsState>()(
+  export const store = create<FormsState>()(
     persist(
       (set) => ({
         forms: [

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { Form } from "./type";
-import { useFormsStore } from "./useFormStore";
 import { v4 as uuidv4 } from 'uuid';
+import { store } from "../store";
+import { Form } from "../type";
 
 export const useEditingForm = () => {
-  const [editingForm, setEditingForm] = useState<any | null>(null);
-  const [selectedFormId, setSelectedFormId] = useState<any | null>(null);
+  const [editingForm, setEditingForm] = useState<Form | null>(null);
+  const [selectedFormId, setSelectedFormId] = useState<string | null>(null);
 
-  const forms = useFormsStore((state) => state.forms);
-  const addForm = useFormsStore((state) => state.addForm);
-  const updateForm = useFormsStore((state) => state.updateForm);
-  const deleteForm = useFormsStore((state) => state.deleteForm);
+  const forms = store((state) => state.forms);
+  const addForm = store((state) => state.addForm);
+  const updateForm = store((state) => state.updateForm);
+  const deleteForm = store((state) => state.deleteForm);
 
   useEffect(() => {
     if (forms.length > 0) {
@@ -71,6 +71,6 @@ export const useEditingForm = () => {
     setSelectedFormId,
     selectedFormId,
     addNewForm,
-    deleteFromForms
+    deleteFromForms,
   };
 };
